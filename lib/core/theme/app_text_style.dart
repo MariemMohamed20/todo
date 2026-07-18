@@ -17,4 +17,10 @@ class AppTextStyle {
     fontSize: 16,
     fontWeight: FontWeight.bold,
   );
+
+   static const TextStyle bodySmallStyle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,);
 }
+  
+  
