@@ -44,7 +44,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   void dispose() {
-    // Crucial: Free up memory when this screen is closed
     nameController.dispose();
     super.dispose();
   }
@@ -60,7 +59,9 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150), // Adjusted slightly to keep it responsive
+                const SizedBox(
+                  height: 150,
+                ), // Adjusted slightly to keep it responsive
                 InkWell(
                   onTap: () {
                     showDialog(
@@ -97,7 +98,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     backgroundImage: image != null
                         ? FileImage(File(image!.path))
                         : null,
-                    child: image != null ? null : const Icon(Icons.person, size: 60),
+                    child: image != null
+                        ? null
+                        : const Icon(Icons.person, size: 60),
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -105,23 +108,32 @@ class _AuthScreenState extends State<AuthScreen> {
                 const SizedBox(height: 15),
                 Text(
                   "Add your name and a profile picture",
-                  style: AppTextStyle.hintStyle,
+                  
                 ),
                 const SizedBox(height: 30),
                 CustomTextFormFeild(
-                  controller: nameController, // Fixed: Using your persistent controller instance
+                  controller: nameController,
+                  title: "Full Name",
+                  hintText: "Enter your name",
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "name is required";
+                    }
+                  },
                 ),
                 const SizedBox(height: 30),
                 AppBottom(
+                  title: "continue",
                   onTap: () async {
-                    // 1. Guard clause: Ensure profile image is selected
                     if (image == null) {
                       showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
                             title: const Text("Error"),
-                            content: const Text("Please select a profile picture"),
+                            content: const Text(
+                              "Please select a profile picture",
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -133,24 +145,23 @@ class _AuthScreenState extends State<AuthScreen> {
                           );
                         },
                       );
-                      return; // Stop execution if there is no image
+                      return; 
                     }
-
-                    // 2. Validate text input & save to database
                     if (formKey.currentState?.validate() ?? false) {
                       try {
                         final newUser = UserModel(
                           image: image!.path,
                           name: nameController.text,
                         );
-
-                        // Async/await makes database calls and navigation much easier to follow than chained .then() callbacks
-                        await Hive.box<UserModel>(AppConstant.UserBox).add(newUser);
-
+                        await Hive.box<UserModel>(
+                          AppConstant.UserBox,
+                        ).add(newUser);
                         if (mounted) {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
                           );
                         }
                       } catch (error) {
@@ -158,7 +169,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       }
                     }
                   },
-                )
+                ),
               ],
             ),
           ),
