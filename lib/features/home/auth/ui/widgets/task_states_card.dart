@@ -1,40 +1,42 @@
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:todo/core/theme/app_color.dart';
 import 'package:todo/core/theme/app_text_style.dart';
 
 class TaskStatesCard extends StatelessWidget {
-  const TaskStatesCard({super.key});
+  final int totalTasks;
+  final int completedTasks;
+  final int pendingTasks;
+
+  const TaskStatesCard({
+    super.key,
+    required this.totalTasks,
+    required this.completedTasks,
+    required this.pendingTasks,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      // Optional: use a RoundedRectangleBorder if you want to match the exact radius of your image
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0), 
+        borderRadius: BorderRadius.circular(24.0),
       ),
       color: AppColor.primaryColor,
       child: Padding(
-        // Generous vertical padding to match the design spacing
         padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
+          children: [
             TaskStateItem(
               title: "Tasks",
-              count: 12,
+              count: totalTasks,
             ),
             TaskStateItem(
               title: "Done",
-              count: 5,
+              count: completedTasks,
             ),
             TaskStateItem(
               title: "Pending",
-              count: 7,
+              count: pendingTasks,
             ),
           ],
         ),
@@ -42,14 +44,13 @@ class TaskStatesCard extends StatelessWidget {
     );
   }
 }
-
 class TaskStateItem extends StatelessWidget {
   final String title;
   final int count;
 
   const TaskStateItem({
-    super.key, 
-    required this.title, 
+    super.key,
+    required this.title,
     required this.count,
   });
 
@@ -59,16 +60,16 @@ class TaskStateItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          count.toString(), 
+          count.toString(),
           style: AppTextStyle.headlineStyle.copyWith(
             color: Colors.white,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
-          title, 
+          title,
           style: AppTextStyle.bodySmallStyle.copyWith(
-            color: Colors.white, 
+            color: Colors.white,
           ),
         ),
       ],
